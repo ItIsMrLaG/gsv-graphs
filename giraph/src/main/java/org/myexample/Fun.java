@@ -1,6 +1,6 @@
 package org.myexample;
 
-import org.algos.msbfs.MSBFS;
+import org.algos.msbfs.MSBfs;
 import org.apache.giraph.GiraphRunner;
 import org.apache.giraph.conf.GiraphConfiguration;
 import org.apache.hadoop.util.ToolRunner;
@@ -15,7 +15,7 @@ public class Fun {
 
         runner.setConf(conf);
         System.exit(ToolRunner.run(runner, new String[]{
-                MSBFS.class.getName(),
+                MSBfs.class.getName(),
                 "-vip", "src/main/resources/giraph/tiny_graph.txt",
                 "-vif", "org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat",
                 "-vof", "org.apache.giraph.io.formats.IdWithValueTextOutputFormat",
