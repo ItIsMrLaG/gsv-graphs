@@ -25,5 +25,7 @@ public class Fun {
                 "-ca", "giraph.SplitMasterWorker=false",
                 "-ca", "giraph.useSuperstepCounters=false",
                 "-ca", "mapreduce.joboutput.outputformat.overwrite=true"}));
+//                "-wc", "worker.ctx.class.getName()"
+//                "-cf", "/path/with/bfs-start-nodes"
     }
 }

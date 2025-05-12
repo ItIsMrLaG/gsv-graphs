@@ -12,20 +12,27 @@ import java.io.IOException;
 
 public class MSBFS extends BasicComputation<
         LongWritable, DoubleWritable, FloatWritable, DoubleWritable> {
-    /**
-     * The shortest paths id
-     */
-    public static final LongConfOption SOURCE_ID =
-            new LongConfOption("SimpleShortestPathsVertex.sourceId", 1,
-                    "The shortest paths id");
 
     private static final Logger LOG =
             Logger.getLogger(MSBFS.class);
+
+    private boolean isSourceVertex(Vertex<LongWritable, ?, ?> vertex) {
+        return ((MSBFSWorkerContext) getWorkerContext()).isSource(
+                vertex.getId().get());
+    }
+
+    private int numSourceVertices() {
+        return ((MSBFSWorkerContext) getWorkerContext()).numSources();
+    }
+
+//    TODO: implement data holder
 
     @Override
     public void compute(
             Vertex<LongWritable, DoubleWritable, FloatWritable> vertex,
             Iterable<DoubleWritable> messages) throws IOException {
+
+//        TODO:
 
     }
 }
