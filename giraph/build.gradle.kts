@@ -1,5 +1,3 @@
-import org.apache.tools.ant.taskdefs.Available
-import org.gradle.internal.classpath.Instrumented.systemProperty
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,37 +28,47 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val GIRAPH_OUTPUT_DIR = File("src/main/resources/giraph/output/")
+val GIRAPH_DIR = File("src/main/resources/giraph/")
+val GIRAPH_RUNCFG_DIR = File("$GIRAPH_DIR/runcfg/")
+val GIRAPH_OUTPUT_DIR = File("$GIRAPH_DIR/output/")
 
-tasks.jar {
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+/* ============== EXAMPLE ==============   */
+
+tasks.register<JavaExec>("runExample") {
+    dependsOn(exampleJar)
+    classpath = files(exampleJar.get().archiveFile) +
+               configurations.runtimeClasspath.get()
+
+    group = "Execution"
+    mainClass.set("org.myexample.Fun")
+    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/example/${getTimestamp()}")
+
+//    jvmArgs = listOf("-Xmx512m")
 }
+
+/* ============== MS-BFS EXAMPLE ==============   */
+
+tasks.register<JavaExec>("runMSBfsExample") {
+    dependsOn(exampleJar)
+    classpath = files(exampleJar.get().archiveFile) +
+               configurations.runtimeClasspath.get()
+    mainClass.set("org.algos.msbfs.runexample.Fun")
+
+    group = "Execution"
+    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/MSBfs/${getTimestamp()}")
+    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/MSBfs/example_graph.txt")
+    systemProperty("giraph.input.sourceIds", "$GIRAPH_RUNCFG_DIR/MSBfs/source_ids.txt")
+
+//    jvmArgs = listOf("-Xmx512m")
+}
+
+/* ============== TOOLS ==============   */
 
 val exampleJar by tasks.registering(Jar::class) {
     archiveClassifier.set("example")
     from(sourceSets.main.get().output)
-    manifest {
-        attributes("Main-Class" to "org.myexample.Fun")
-    }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-tasks.register<JavaExec>("runExample") {
-    group = "Execution"
-
-    // exec properties
-    dependsOn(exampleJar)
-    classpath = files(exampleJar.get().archiveFile) +
-               configurations.runtimeClasspath.get()
-    mainClass.set("org.myexample.Fun")
-
-    //  log4j properties
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
-    val timestamp = dateFormat.format(Date())
-    val outputPath = "$GIRAPH_OUTPUT_DIR/example/" + timestamp
-    systemProperty("giraph.log.dir", outputPath)
-
-    jvmArgs = listOf("-Xmx512m")
-}
+fun getTimestamp() = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Date())
