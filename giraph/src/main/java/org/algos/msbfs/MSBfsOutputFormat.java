@@ -19,7 +19,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
  * }</pre>
  */
 public class MSBfsOutputFormat
-        extends TextVertexOutputFormat<LongWritable, MapWritable, NullWritable> {
+        extends TextVertexOutputFormat<IntWritable, MapWritable, NullWritable> {
 
     public static final String LINE_TOKENIZE_VALUE = "output.delimiter";
     public static final String LINE_TOKENIZE_VALUE_DEFAULT = "\t";
@@ -41,8 +41,7 @@ public class MSBfsOutputFormat
         }
 
         @Override
-        protected Text convertVertexToLine(Vertex<LongWritable, MapWritable, NullWritable> vertex)
-                throws IOException {
+        protected Text convertVertexToLine(Vertex<IntWritable, MapWritable, NullWritable> vertex) {
 
             StringBuilder str = new StringBuilder();
 

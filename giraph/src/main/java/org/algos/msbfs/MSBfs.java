@@ -6,42 +6,48 @@ import org.apache.giraph.graph.Vertex;
 import org.apache.hadoop.io.*;
 import org.apache.log4j.Logger;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class MSBfs extends BasicComputation<
-        LongWritable, MapWritable, NullWritable, MSBfsMessage> {
+        IntWritable, MapWritable, NullWritable, MSBfsMessage> {
 
     private static final Logger LOG =
             Logger.getLogger(MSBfs.class);
 
-    private static final long STRANGE_VALUE = Long.MIN_VALUE;
+    private static final int STRANGE_VALUE = -1;
 
-    private boolean isSourceVertex(Vertex<LongWritable, ?, ?> vertex) {
+    private boolean isSourceVertex(Vertex<IntWritable, ?, ?> vertex) {
         return ((MSBFSWorkerContext) getWorkerContext()).isSource(
                 vertex.getId().get());
     }
 
     @Override
     public void compute(
-            Vertex<LongWritable, MapWritable, NullWritable> vertex,
+            Vertex<IntWritable, MapWritable, NullWritable> vertex,
             Iterable<MSBfsMessage> messages
     ) {
+        HashSet<IntWritable> msgData = new HashSet<>();
 
         if (getSuperstep() == 0) {
             initializeVertex(vertex);
+
+            if (isSourceVertex(vertex)) {
+                msgData.add(vertex.getId());
+            }
+
         }
 
         MapWritable sourceParentMap = vertex.getValue();
-        ImmutableSet.Builder<LongWritable> msgDataBuilder = ImmutableSet.builder();
 
         for (MSBfsMessage message : messages) {
-            LongWritable mbNewParentId = message.getSenderId();
+            IntWritable mbNewParentId = message.getSenderId();
 
-            for (LongWritable mbSourceId : message.get()) {
-                if (sourceParentMap.containsKey(mbSourceId)) {
+            for (IntWritable mbSourceId : message.get()) {
+                if (msgData.contains(mbSourceId)) {
 
                     // For deterministic behaviour //
-                    LongWritable oldParentId = (LongWritable) sourceParentMap.get(mbSourceId);
+                    IntWritable oldParentId = (IntWritable) sourceParentMap.get(mbSourceId);
 
                     if (mbNewParentId.get() < oldParentId.get()) {
                         sourceParentMap.put(mbSourceId, mbNewParentId);
@@ -50,33 +56,34 @@ public class MSBfs extends BasicComputation<
                     continue;
                 }
 
-                msgDataBuilder.add(mbSourceId);
+                if (sourceParentMap.containsKey(mbSourceId)) { continue; }
+
+                msgData.add(mbSourceId);
                 sourceParentMap.put(mbSourceId, mbNewParentId);
             }
         }
         vertex.setValue(sourceParentMap);
 
-        Set<LongWritable> msgData = msgDataBuilder.build();
         if (!msgData.isEmpty()) {
-            LongWritable[] msgIds = new LongWritable[msgData.size()];
+            IntWritable[] msgIds = new IntWritable[msgData.size()];
 
             int i = 0;
-            for (LongWritable value : msgData) {
+            for (IntWritable value : msgData) {
                 msgIds[i++] = value;
             }
 
-            sendMessageToAllEdges(vertex, new MSBfsMessage(LongWritable.class, msgIds, vertex.getId()));
+            sendMessageToAllEdges(vertex, new MSBfsMessage(IntWritable.class, msgIds, vertex.getId()));
         }
 
         vertex.voteToHalt();
     }
 
-    private void initializeVertex(Vertex<LongWritable, MapWritable, NullWritable> vertex) {
+    private void initializeVertex(Vertex<IntWritable, MapWritable, NullWritable> vertex) {
         MapWritable sourceParentMap = new MapWritable(); // parent_id -> part_of_path_from_parent_id
 
         if (isSourceVertex(vertex)) {
-            long sourceIndex = vertex.getId().get();
-            sourceParentMap.put(new LongWritable(sourceIndex), new LongWritable(STRANGE_VALUE));
+            int sourceIndex = vertex.getId().get();
+            sourceParentMap.put(new IntWritable(sourceIndex), new IntWritable(STRANGE_VALUE));
         }
 
         vertex.setValue(sourceParentMap);
