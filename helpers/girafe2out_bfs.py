@@ -17,7 +17,7 @@ def convert_format(input_data, source_id_order):
         pairs_str = parts[1]
 
         # Extract (sourceId: parentId) pairs
-        pairs = re.findall(r"\((\d+): (\d+)\)", pairs_str)
+        pairs = re.findall(r"\((\d+):(-?\d+)\)", pairs_str)
         source_id_to_parent_id = {
             int(source_id): int(parent_id) for source_id, parent_id in pairs
         }
@@ -36,7 +36,7 @@ def convert_format(input_data, source_id_order):
     # Prepare the output
     output = []
     for line_id, parent_ids in data:
-        output.append(f"{line_id} " + " ".join(parent_ids))
+        output.append(f"{line_id}\t" + " ".join(parent_ids))
 
     return "\n".join(output)
 
@@ -45,7 +45,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Convert input format to desired output format."
     )
-    parser.add_argument("input_file", help="Path to the input DIMACS .gr file")
+    parser.add_argument("input_file", help="Path to the input file")
     parser.add_argument("output_file", help="Path for the converted output file")
     parser.add_argument(
         "--source-id-order",
@@ -56,10 +56,12 @@ def main():
     )
     args = parser.parse_args()
 
+    print(args.source_id_order)
+
     with open(args.input_file, "r") as file:
         input_data = file.read()
         converted_output = convert_format(input_data, args.source_id_order)
-        with open(args.output_file, "rw") as out_file:
+        with open(args.output_file, "w+") as out_file:
             out_file.write(converted_output)
 
 
