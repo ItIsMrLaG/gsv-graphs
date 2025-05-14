@@ -11,7 +11,7 @@ LIB = -L$(HADOOP_HOME)/lib/native
 LDFLAGS = -lhdfs
 
 run_%: %.elf
-	mpiexec -n 8 $< # > $@.res  2> /dev/null
+	mpiexec -n 8 $< > $@.res  2> /dev/null
 
 %.elf: %.cpp
 	$(CCOMPILE) $< $(CPPFLAGS) $(LIB) $(LDFLAGS) -o $@

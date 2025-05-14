@@ -154,7 +154,7 @@ void req_pbfs(string in_path, string out_path) {
 
 int main(int argc, char* argv[]) {
     init_workers();
-    req_pbfs("/pp_bfs", "/pp_bfs_out");
+    req_pbfs("/input", "/output");
     worker_finalize();
     return 0;
 }
