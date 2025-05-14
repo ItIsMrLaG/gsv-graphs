@@ -34,4 +34,5 @@ $HADOOP_HOME/bin/hadoop fs -put -f $INPUT_FOLDER /
 
 make run_$ALGO
 
+rm -r ./output
 $HADOOP_HOME/bin/hadoop fs -get -f /output
