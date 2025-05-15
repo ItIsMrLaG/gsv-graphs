@@ -3,3 +3,6 @@
 | Описание формата | Класс                                                            |
 |------------------|------------------------------------------------------------------|
 | `id_1 \t id_2`   | `org.apache.giraph.io.formats.IntNullReverseTextEdgeInputFormat` |
+
+
+`-conf <configuration file>     specify an application configuration file`

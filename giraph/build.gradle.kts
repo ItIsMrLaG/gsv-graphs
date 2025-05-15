@@ -1,9 +1,9 @@
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
 plugins {
     id("java")
+    id("com.diffplug.spotless") version "6.13.0"
 }
 
 group = "org.example"
@@ -26,6 +26,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        target("src/**/*.java") // Указываем, какие файлы проверять
+        googleJavaFormat("1.7") // Или другую версию / формат по вкусу
+    }
 }
 
 val GIRAPH_DIR = File("src/main/resources/giraph/")
