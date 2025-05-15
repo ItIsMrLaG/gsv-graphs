@@ -40,6 +40,15 @@ public class BoruvkaMasterComputeSM extends DefaultMasterCompute {
       case PHASE5_RESPONSE_UPDATE_GRAPH_EDGES:
         setGlobalState(PHASE6_UPDATE_GRAPH_EDGES);
         return;
+      case PHASE6_UPDATE_GRAPH_EDGES:
+        setGlobalState(PHASE7_COLLAPSE_TO_SUPER_VERTEX);
+        return;
+      case PHASE7_COLLAPSE_TO_SUPER_VERTEX:
+        setGlobalState(PHASE8_RESET_VERTEX);
+        return;
+      case PHASE8_RESET_VERTEX:
+        setGlobalState(PHASE1_CHOSE_MIN_EDGE_AND_SEND_ID);
+        return;
 
       default:
         throw new IllegalStateException("Impossible state");

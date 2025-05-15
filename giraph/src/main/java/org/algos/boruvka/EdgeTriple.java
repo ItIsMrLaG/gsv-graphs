@@ -7,41 +7,41 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
 public class EdgeTriple implements Writable {
-  private IntWritable from = new IntWritable();
-  private IntWritable to = new IntWritable();
-  private IntWritable weight = new IntWritable();
+  private IntWritable first = new IntWritable();
+  private IntWritable second = new IntWritable();
+  private IntWritable label = new IntWritable();
 
   public EdgeTriple() {}
 
   public EdgeTriple(IntWritable from, IntWritable to, IntWritable weight) {
-    this.from.set(from.get());
-    this.to.set(to.get());
-    this.weight.set(weight.get());
+    this.first.set(from.get());
+    this.second.set(to.get());
+    this.label.set(weight.get());
   }
 
-  public int getFrom() {
-    return from.get();
+  public int getFirst() {
+    return first.get();
   }
 
-  public int getTo() {
-    return to.get();
+  public int getSecond() {
+    return second.get();
   }
 
-  public int getWeight() {
-    return weight.get();
+  public IntWritable getLabel() {
+    return label;
   }
 
   @Override
   public void write(DataOutput out) throws IOException {
-    from.write(out);
-    to.write(out);
-    weight.write(out);
+    first.write(out);
+    second.write(out);
+    label.write(out);
   }
 
   @Override
   public void readFields(DataInput in) throws IOException {
-    from.readFields(in);
-    to.readFields(in);
-    weight.readFields(in);
+    first.readFields(in);
+    second.readFields(in);
+    label.readFields(in);
   }
 }

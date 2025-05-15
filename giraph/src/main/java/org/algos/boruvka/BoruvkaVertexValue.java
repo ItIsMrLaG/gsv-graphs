@@ -10,7 +10,9 @@ import org.apache.hadoop.io.Writable;
 public class BoruvkaVertexValue implements Writable {
 
   // COMMON //
-  List<EdgeTriple> edges = new ArrayList<>();
+  List<EdgeTriple> outEdges = new ArrayList<>();
+  List<EdgeTriple> superVEdges = new ArrayList<>();
+
   boolean isDead = false;
 
   // PHASE1 //
@@ -22,6 +24,15 @@ public class BoruvkaVertexValue implements Writable {
   int superVertexId;
 
   BoruvkaVertexValue() {}
+
+  public void reset() {
+    isDead = false;
+    minEdgeHolderId = PhaseSpecValues.DEFAULT.code;
+    minEdgeTriple = null;
+    type = VertexType.UNKNOWN;
+    superVertexId = PhaseSpecValues.DEFAULT.code;
+    outEdges = new ArrayList<>();
+  }
 
   @Override
   public void write(DataOutput dataOutput) throws IOException {
