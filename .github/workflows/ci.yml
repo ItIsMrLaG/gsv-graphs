@@ -24,8 +24,8 @@ jobs:
 
       - name: Install Apache Giraph to Maven Local
         run: |
-          git clone --branch release-1.3 https://github.com/apache/giraph.git
-          cd giraph
+          git clone --branch release-1.3 https://github.com/apache/giraph.git giraphLib
+          cd giraphLib
           mvn clean install -Phadoop_2 -Dhadoop.version=2.7.7 -DskipTests
           cd ..
 
