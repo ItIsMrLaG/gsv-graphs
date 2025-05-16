@@ -90,7 +90,7 @@ class PBFSVertex : public Vertex<VertexID, PBFSValue, PBFSMessage> {
 };
 
 class PBFSWorker : public Worker<PBFSVertex> {
-    char buf[100];
+    char buf[256];
     size_t numOfStartVertexes = -1;
     vector<VertexID> startVertexes;
 
