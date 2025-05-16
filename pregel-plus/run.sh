@@ -18,7 +18,20 @@ case $ALGO in
     ;;
   
   "msbfs")
-    python ../helpers/snapjson2pp_pbfs.py $RAW_GRAPH $GOOD_GRAPH
+    EXT="${RAW_GRAPH##*.}"
+    case "$EXT" in
+      "txt")
+        python ../helpers/snaptxt2pp_pbfs.py $RAW_GRAPH > $GOOD_GRAPH
+        ;;
+      "json")
+        python ../helpers/snapjson2pp_pbfs.py $RAW_GRAPH $GOOD_GRAPH
+        ;;
+      *)
+        echo "--> Detected: Unknown or unhandled EXT value: '$EXT'" 
+        return -1
+        ;;
+    esac
+    
 
     NEW_LINE="p\t$ARGS_NUM_AFTER_3 $ARGS_AFTER_3\n"
     sed -i "1s/^/$NEW_LINE/" $GOOD_GRAPH
