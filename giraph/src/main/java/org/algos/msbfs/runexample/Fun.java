@@ -1,7 +1,7 @@
 package org.algos.msbfs.runexample;
 
 import org.CommonRunner;
-import org.algos.common.CSVIntNullReverseTextEdgeInputFormat;
+import org.algos.msbfs.CSVIntNullReverseTextEdgeInputFormat;
 import org.algos.msbfs.MSBFSWorkerContext;
 import org.algos.msbfs.MSBfs;
 import org.algos.msbfs.MSBfsOutputFormat;

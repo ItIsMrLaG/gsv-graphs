@@ -5,7 +5,7 @@ import static org.algos.boruvka.VertexVoteType.*;
 import org.apache.giraph.aggregators.BasicAggregator;
 import org.apache.hadoop.io.IntWritable;
 
-public class StateAggregator extends BasicAggregator<IntWritable> {
+public class VoteAggregator extends BasicAggregator<IntWritable> {
   @Override
   public void aggregate(IntWritable newVoteType) {
     VertexVoteType newVote = VertexVoteType.fromWritable(newVoteType);

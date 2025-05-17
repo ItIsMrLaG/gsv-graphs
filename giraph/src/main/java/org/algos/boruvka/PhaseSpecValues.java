@@ -2,7 +2,7 @@ package org.algos.boruvka;
 
 public enum PhaseSpecValues {
   DEFAULT(-100),
-  SYNTETIC_LABEL_WAIT_DELETION(-101),
+  SYNTHETIC_LABEL_WAIT_DELETION(-101),
   PHASE3_REQUEST_SUPER_V_ID(-4),
   PHASE45_REQUEST_SUPER_V_ID(-6);
 

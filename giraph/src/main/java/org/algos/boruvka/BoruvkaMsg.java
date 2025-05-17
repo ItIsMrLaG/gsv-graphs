@@ -16,7 +16,7 @@ public class BoruvkaMsg implements Writable {
   public IntWritable senderId;
   public IntWritable superVertexId = new IntWritable(DEFAULT.code);
   public IntWritable superVertexResponse = new IntWritable(DEFAULT.code);
-  public IntWritable superVertexResponseLabel = new IntWritable(DEFAULT.code);
+  public EdgeMeta superVertexResponseEdgeMeta = new EdgeMeta();
   private ArrayWritable outEdges = null;
   private ArrayWritable superVEdges = null;
 
@@ -26,22 +26,23 @@ public class BoruvkaMsg implements Writable {
     senderId = _senderId;
   }
 
-  void setOutEdges(List<EdgeTriple> _outEdges) {
-    outEdges = new ArrayWritable(EdgeTriple.class, _outEdges.toArray(new EdgeTriple[0]));
+  void setOutEdges(List<EdgeWritable> _outEdges) {
+    outEdges = new ArrayWritable(EdgeMeta.class, _outEdges.toArray(new EdgeWritable[0]));
   }
 
-  List<EdgeTriple> getOutEdges() {
+  List<EdgeWritable> getOutEdges() {
     assert outEdges != null;
-    return Arrays.asList((EdgeTriple[]) outEdges.get());
+    return Arrays.asList((EdgeWritable[]) outEdges.get());
   }
 
-  void setSuperVEdges(List<EdgeTriple> _superVEdges) {
-    superVEdges = new ArrayWritable(EdgeTriple.class, _superVEdges.toArray(new EdgeTriple[0]));
+//  TODO: why don't use
+  void setSuperVEdgesMeta(List<EdgeMeta> _superVEdges) {
+    superVEdges = new ArrayWritable(EdgeMeta.class, _superVEdges.toArray(new EdgeMeta[0]));
   }
 
-  List<EdgeTriple> getSuperVEdges() {
+  List<EdgeMeta> getSuperVEdgesMeta() {
     assert superVEdges != null;
-    return Arrays.asList((EdgeTriple[]) superVEdges.get());
+    return Arrays.asList((EdgeMeta[]) superVEdges.get());
   }
 
   @Override

@@ -11,7 +11,7 @@ public class BoruvkaMasterComputeSM extends DefaultMasterCompute {
 
   @Override
   public void initialize() throws InstantiationException, IllegalAccessException {
-    registerAggregator("VOTE", StateAggregator.class);
+    registerAggregator("VOTE", VoteAggregator.class);
 
     registerPersistentAggregator("GLOBAL", IntOverwriteAggregator.class);
     setGlobalState(PHASE1_CHOSE_MIN_EDGE_AND_SEND_ID);
