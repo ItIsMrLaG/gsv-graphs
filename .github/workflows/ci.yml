@@ -1,0 +1,50 @@
+name: Java CI for giraph subdir
+
+on:
+  push:
+    paths:
+      - 'giraph/**'
+  pull_request:
+    paths:
+      - 'giraph/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Install Apache Giraph to Maven Local
+        run: |
+          git clone --branch release-1.3 https://github.com/apache/giraph.git giraphLib
+          cd giraphLib
+          mvn clean install -Phadoop_2 -Dhadoop.version=2.7.7 -DskipTests
+          cd ..
+
+      - name: Ensure gradlew is executable
+        run: |
+          cd giraph
+          chmod +x ./gradlew
+
+      - name: Verify Code Format (Optional, using Spotless)
+        run: |
+          cd giraph
+          ./gradlew spotlessCheck
+
+      - name: Build Project
+        run: |
+          cd giraph
+          ./gradlew build --no-daemon
+
+      - name: Run Tests (Optional)
+        run: |
+          cd giraph
+          ./gradlew test --no-daemon
