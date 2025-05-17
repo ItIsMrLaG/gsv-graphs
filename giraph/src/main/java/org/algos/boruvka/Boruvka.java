@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.EdgeFactory;
 import org.apache.giraph.graph.BasicComputation;
@@ -23,7 +22,7 @@ public class Boruvka
 
   @Override
   public void compute(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages)
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages)
       throws IOException {
 
     if (getSuperstep() == 0) {
@@ -70,7 +69,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 1  ++++++++++++  //
 
   void phase1_choseMinEdgeAndSendId(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
 
     Edge<IntWritable, EdgeMeta> minEdge = null;
 
@@ -83,7 +82,7 @@ public class Boruvka
         continue;
       }
 
-//      if (edge.getValue().label.get() < label) minEdge = edge;
+      //      if (edge.getValue().label.get() < label) minEdge = edge;
 
       if (label == minEdge.getValue().label.get() && toId < minEdge.getTargetVertexId().get())
         minEdge = edge;
@@ -111,7 +110,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 2  ++++++++++++  //
 
   void phase2_getResponseFromChosenId(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
     boolean isReceived = false;
 
@@ -143,7 +142,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 3  ++++++++++++  //
 
   void phase3_findingSuperVertex(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
 
     switch (myValue.type) {
@@ -189,7 +188,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 4-5-6  ++++++++++++  //
 
   void phase4_requestUpdateGraphEdges(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
 
     BoruvkaMsg msg = new BoruvkaMsg(vertex.getId());
     msg.superVertexResponse = new IntWritable(PHASE45_REQUEST_SUPER_V_ID.code);
@@ -203,7 +202,7 @@ public class Boruvka
   }
 
   void phase5_responseUpdateGraphEdges(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     for (BoruvkaMsg msg : messages) {
       BoruvkaMsg newMsg = new BoruvkaMsg(vertex.getId());
 
@@ -218,7 +217,7 @@ public class Boruvka
   }
 
   void phase6_updateGraphEdges(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
 
     HashMap<IntWritable, EdgeMeta> superVIdToMinEdgeMeta = new HashMap<>();
@@ -265,7 +264,7 @@ public class Boruvka
     vertex.addEdge(edgeToSuperVertex);
     sendMessage(mySuperVertexId, msg);
 
-   //    NEXT STEP
+    //    NEXT STEP
     vertex.setValue(myValue);
     voteToNext();
   }
@@ -273,7 +272,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 7  ++++++++++++  //
 
   void phase7_collapseToSuperVertex(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
 
     //    DELETE ALL EDGES
@@ -301,8 +300,7 @@ public class Boruvka
             if (superVIdToMinEdges.containsKey(myEdge.targetId)) {
               int oldMinLabel = superVIdToMinEdges.get(myEdge.targetId).meta.getLabel();
 
-              if (mbNewMinLabel < oldMinLabel)
-                superVIdToMinEdges.put(myEdge.targetId, myEdge);
+              if (mbNewMinLabel < oldMinLabel) superVIdToMinEdges.put(myEdge.targetId, myEdge);
 
               continue;
             }
@@ -332,7 +330,7 @@ public class Boruvka
   //  ++++++++++++  PHASE 8  ++++++++++++  //
 
   void phase8_resetVertex(
-          Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
+      Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
 
     myValue.reset();
