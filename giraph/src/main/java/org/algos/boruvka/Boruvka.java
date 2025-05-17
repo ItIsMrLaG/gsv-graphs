@@ -93,7 +93,9 @@ public class Boruvka
 
     if (minEdge == null) {
       myValue.isDead = true;
+      myValue.type = SUPER_VERTEX;
       voteToNext();
+      vertex.setValue(myValue);
       vertex.voteToHalt();
       return;
     }

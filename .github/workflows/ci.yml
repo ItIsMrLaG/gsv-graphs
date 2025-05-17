@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '8'
-          distribution: 'temurin'  # или 'zulu'/'adopt' по вкусу
+          distribution: 'temurin'
 
       - name: Install Apache Giraph to Maven Local
         run: |
@@ -28,6 +28,11 @@ jobs:
           cd giraphLib
           mvn clean install -Phadoop_2 -Dhadoop.version=2.7.7 -DskipTests
           cd ..
+
+      - name: Ensure gradlew is executable
+        run: |
+          cd giraph
+          chmod +x ./gradlew
 
       - name: Verify Code Format (Optional, using Spotless)
         run: |
@@ -43,4 +48,3 @@ jobs:
         run: |
           cd giraph
           ./gradlew test --no-daemon
-

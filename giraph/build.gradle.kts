@@ -49,22 +49,37 @@ tasks.register<JavaExec>("runExample") {
     group = "Execution"
     mainClass.set("org.myexample.Fun")
     systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/example/${getTimestamp()}")
-
-//    jvmArgs = listOf("-Xmx512m")
 }
 
 /* ============== MS-BFS EXAMPLE ==============   */
 
-tasks.register<JavaExec>("runMSBfsExample") {
+val MSBFS_NAME = "msbfs"
+
+tasks.register<JavaExec>("run{$MSBFS_NAME}Example") {
     dependsOn(exampleJar)
     classpath = files(exampleJar.get().archiveFile) +
                configurations.runtimeClasspath.get()
-    mainClass.set("org.algos.msbfs.runexample.Fun")
+    mainClass.set("org.algos.{$MSBFS_NAME}.runexample.Fun")
 
     group = "Execution"
-    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/MSBfs/${getTimestamp()}")
-    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/MSBfs/example_graph.txt")
-    systemProperty("giraph.input.sourceIds", "$GIRAPH_RUNCFG_DIR/MSBfs/source_ids.txt")
+    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/{$MSBFS_NAME}/${getTimestamp()}")
+    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/{$MSBFS_NAME}/example_graph.txt")
+    systemProperty("giraph.input.sourceIds", "$GIRAPH_RUNCFG_DIR/{$MSBFS_NAME}/source_ids.txt")
+}
+
+/* ============== BORUVKA EXAMPLE ==============   */
+
+val BORUVKA_NAME = "boruvka"
+
+tasks.register<JavaExec>("run{$BORUVKA_NAME}Example") {
+    dependsOn(exampleJar)
+    classpath = files(exampleJar.get().archiveFile) +
+               configurations.runtimeClasspath.get()
+    mainClass.set("org.algos.{$BORUVKA_NAME}.runexample.Fun")
+
+    group = "Execution"
+    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/{$BORUVKA_NAME}/${getTimestamp()}")
+    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/{$BORUVKA_NAME}/example_graph.txt")
 
 //    jvmArgs = listOf("-Xmx512m")
 }

@@ -21,12 +21,14 @@ public class EdgeWritable implements Writable {
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
-//        TODO
+        targetId.write(dataOutput);
+        meta.write(dataOutput);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
-//        TODO
+        targetId.readFields(dataInput);
+        meta.readFields(dataInput);
     }
 
 }
