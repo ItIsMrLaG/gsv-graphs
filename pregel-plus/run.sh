@@ -45,7 +45,9 @@ esac
 
 $HADOOP_HOME/bin/hadoop fs -put -f $INPUT_FOLDER /
 
-make run_$ALGO
+if [ ! "${UPLOAD_ONLY+x}" ]; then 
+  make run_$ALGO
 
-rm -r ./output
-$HADOOP_HOME/bin/hadoop fs -get -f /output
+  rm -r ./output
+  $HADOOP_HOME/bin/hadoop fs -get -f /output
+fi

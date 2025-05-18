@@ -1,0 +1,87 @@
+name: 🧠💥 GRAPH GOD AWAKENS - CI OF CHAOS 💥🧠
+
+on:
+  push:
+    paths:
+      - 'pregel-plus/**'
+  pull_request:
+    paths:
+      - 'pregel-plus/**'
+
+jobs:
+  unleash-the-graph-beast:
+
+    runs-on: ubuntu-latest
+
+    env:
+      HADOOP_HOME: ${{ github.workspace }}/hadoop
+      PP_HOME: ${{ github.workspace }}/pregel-plus-system
+
+    steps:
+    - name: ⚡ CHECKOUT THE SACRED CODE
+      uses: actions/checkout@v4
+
+    - name: 🔧 SUMMON SYSTEM TOOLS OF POWER
+      run: |
+        echo "🛠️ Installing packages to forge the build..."
+        sudo apt-get update
+        sudo apt-get install -y build-essential default-jdk wget mpich # git libboost-all-dev
+        echo "☕ Java is ready. Boost is dead. GCC is fired up. Let's ROLL."
+
+    # - name: 🔥 BUILD MPICH 3.1 FROM SOURCE — UNHOLY PARALLELISM AWAKENS
+    #   run: |
+    #     echo "🌌 Summoning MPICH 3.1 — Parallel universes incoming..."
+    #     wget http://www.mpich.org/static/downloads/3.1/mpich-3.1.tar.gz
+    #     tar -xzf mpich-3.1.tar.gz
+    #     cd mpich-3.1
+    #     ./configure --prefix=$HOME/mpich-install --disable-f77 --disable-fc
+    #     make
+    #     make install
+    #     echo "🏗️ MPICH 3.1 installed to $HOME/mpich-install"
+    #     echo "$HOME/mpich-install/bin" >> $GITHUB_PATH
+    #     echo "MPICH_HOME=$HOME/mpich-install" >> $GITHUB_ENV
+    #     echo "LD_LIBRARY_PATH=$HOME/mpich-install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: 🐘 DOWNLOAD HADOOP FROM THE FORBIDDEN MOUNTAIN
+      run: |
+        echo "🌪️ Fetching the mighty Hadoop..."
+        wget https://dlcdn.apache.org/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz
+        echo "📦 Unleashing the Hadoop Kraken..."
+        tar -xzf hadoop-2.10.2.tar.gz
+        mv hadoop-2.10.2 $HADOOP_HOME
+        echo "🔗 HADOOP_HOME linked at $HADOOP_HOME"
+        echo "PATH=$HADOOP_HOME/bin:$PATH" >> $GITHUB_ENV
+        echo "HADOOP_HOME=$HADOOP_HOME" >> $GITHUB_ENV
+
+    - name: 📥 SUMMON PREGEL PLUS FROM ITS GITHUB SANCTUM! 📥
+      uses: actions/checkout@v4
+      with:
+        repository: yaobaiwei/PregelPlus
+        path: ${{ env.PP_HOME }}
+
+    - name: 🎸 BUILD YOUR FREE-SPIRIT GRAPH ANALYZER
+      working-directory: ./pregel-plus
+      run: |
+        echo "🎶 Time to build YOUR code — no CMake, just RAW METAL!"
+        make -j$(nproc) || (echo '🔥 Your build failed! But legends rise again!' && exit 1)
+        echo "🚀 Your code is compiled! The Graph Analyzer is ALIVE!"
+
+    # - name: 🧪 SLAY BUGS WITH TESTS (IF ANY)
+    #   run: |
+    #     echo "🔍 Looking for tests to run..."
+    #     if [ -f ./run_tests.sh ]; then
+    #       echo "⚔️ Found tests! Executing them now!"
+    #       chmod +x ./run_tests.sh
+    #       ./run_tests.sh || (echo '💀 Tests failed! The bugs have struck back!' && exit 1)
+    #     else
+    #       echo "🤷 No tests found. Fly free, cowboy."
+    #     fi
+
+    - name: 🏁 VICTORY LOG — THE GRAPH GOD RISES
+      run: |
+        echo ""
+        echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+        echo "🎉 CI COMPLETED! THE GRAPH BEAST IS UNLEASHED!"
+        echo "🚀 Pregel+ is built. Your analyzer is forged."
+        echo "🧠 Time to crunch massive graphs like a legend!"
+        echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
