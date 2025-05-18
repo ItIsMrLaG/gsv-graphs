@@ -76,15 +76,16 @@ object Boruvka {
 
 object BoruvkaRun {
   def main(args: Array[String]): Unit = {
-    if (args.length != 2) {
-      System.err.println("Usage: BoruvkaRun <inputFile> <outputFile>")
+    if (args.length != 3) {
+      System.err.println("Usage: BoruvkaRun <inputFile> <outputFile> <coresNum>")
       System.exit(1)
     }
 
     val inputFile = args(0)
     val outputFile = args(1)
+    val coresNum = args(2).toInt
 
-    val conf = new SparkConf().setAppName("BoruvkaRun").setMaster("local[*]")
+    val conf = new SparkConf().setAppName("BoruvkaRun").setMaster(s"local[${coresNum}]")
     val sc = new SparkContext(conf)
 
     val lines: RDD[String] = sc.textFile(inputFile)
