@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.example"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenLocal()
@@ -79,7 +79,7 @@ tasks.register<JavaExec>("runBoruvkaExample") {
 
     group = "Execution"
     systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/$BORUVKA_NAME/${getTimestamp()}")
-    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/$BORUVKA_NAME/example_graph.txt")
+    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/$BORUVKA_NAME/example_graph_triangle.txt")
 
 //    jvmArgs = listOf("-Xmx512m")
 }
