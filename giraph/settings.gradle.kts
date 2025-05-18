@@ -1,1 +1,1 @@
-rootProject.name = "giraph"
+rootProject.name = "giraph-boruvka-msbfs"
