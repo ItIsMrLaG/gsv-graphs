@@ -1,3 +1,13 @@
+# Installation
+
+* **Java 8**
+* **Giraph version 1.3-SNAPSHOT**
+
+> Publishing giraph in mavanLocal
+> ```
+> mvn clean install -Phadoop_2 -Dhadoop.version=2.10.1 -DskipTests
+> ```
+
 # Gradle run cfg
 
 ## Boruvka
