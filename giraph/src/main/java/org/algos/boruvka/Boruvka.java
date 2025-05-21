@@ -139,8 +139,6 @@ public class Boruvka
       }
     }
 
-    if (myValue.type != SUPER_VERTEX) myValue.minEdgesMeta.add(myValue.getMinEdge().getMeta());
-
     vertex.setValue(myValue);
     voteToNext();
   }
@@ -263,7 +261,6 @@ public class Boruvka
     //    CREATE MSG TO SUPER VERTEX
     BoruvkaMsg msg = new BoruvkaMsg(vertex.getId());
     msg.setOutEdges(outEdges);
-    msg.setSuperVEdgesMeta(myValue.minEdgesMeta);
 
     //    SEND INFO TO SUPER VERTEX
     Edge<IntWritable, EdgeMeta> edgeToSuperVertex =
@@ -300,8 +297,6 @@ public class Boruvka
         HashMap<Integer, EdgeWritable> superVIdToMinEdges = new HashMap<>();
 
         for (BoruvkaMsg msg : messages) {
-          myValue.minEdgesMeta.addAll(msg.getSuperVEdgesMeta());
-
           for (EdgeWritable myEdge : msg.getOutEdges()) {
             int mbNewMinLabel = myEdge.getMeta().getLabel();
             int targetId = myEdge.getTargetId();

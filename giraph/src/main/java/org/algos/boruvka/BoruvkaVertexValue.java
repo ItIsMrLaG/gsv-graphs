@@ -3,8 +3,6 @@ package org.algos.boruvka;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.hadoop.io.Writable;
 
 public class BoruvkaVertexValue implements Writable {
@@ -17,8 +15,6 @@ public class BoruvkaVertexValue implements Writable {
   private EdgeWritable minEdge = new EdgeWritable();
 
   // COMMON //
-  public List<EdgeMeta> minEdgesMeta = new ArrayList<>();
-
   public BoruvkaVertexValue() {}
 
   public EdgeWritable getMinEdge() {
@@ -45,11 +41,6 @@ public class BoruvkaVertexValue implements Writable {
 
   @Override
   public void write(DataOutput out) throws IOException {
-    out.writeInt(minEdgesMeta.size());
-    for (EdgeMeta edge : minEdgesMeta) {
-      edge.write(out);
-    }
-
     out.writeBoolean(isDead);
     out.writeInt(minEdgeHolderId);
     minEdge.write(out);
@@ -59,14 +50,6 @@ public class BoruvkaVertexValue implements Writable {
 
   @Override
   public void readFields(DataInput in) throws IOException {
-    minEdgesMeta.clear();
-    int metaSize = in.readInt();
-    for (int i = 0; i < metaSize; i++) {
-      EdgeMeta edge = new EdgeMeta();
-      edge.readFields(in);
-      minEdgesMeta.add(edge);
-    }
-
     isDead = in.readBoolean();
     minEdgeHolderId = in.readInt();
     minEdge.readFields(in);

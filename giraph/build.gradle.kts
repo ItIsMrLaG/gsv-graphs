@@ -63,7 +63,7 @@ tasks.register<JavaExec>("runMSBfsExample") {
 
     systemProperty("giraph.output.dir", propOrDefault("giraphOutDir", "$GIRAPH_OUTPUT_DIR/$MSBFS_NAME/${getTimestamp()}"))
     systemProperty("giraph.input.graph", propOrDefault("giraphInputGraph", "$GIRAPH_RUNCFG_DIR/$MSBFS_NAME/example_graph.txt"))
-    systemProperty("giraph.log.level", propOrDefault("giraphLogLevel", "FATAL"))
+    systemProperty("giraph.log.level", propOrDefault("giraphLogLevel", "OFF"))
     systemProperty("giraph.thread.n", propOrDefault("giraphThreadN", "1"))
     systemProperty("giraph.metrics.enable", propOrDefault("giraphMetricsEnable", "false"))
 
