@@ -57,14 +57,19 @@ val MSBFS_NAME = "msbfs"
 
 tasks.register<JavaExec>("runMSBfsExample") {
     dependsOn(exampleJar)
-    classpath = files(exampleJar.get().archiveFile) +
-               configurations.runtimeClasspath.get()
+    group = "Execution"
+    classpath = files(exampleJar.get().archiveFile) + configurations.runtimeClasspath.get()
     mainClass.set("org.algos.$MSBFS_NAME.runexample.Fun")
 
-    group = "Execution"
-    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/$MSBFS_NAME/${getTimestamp()}")
-    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/$MSBFS_NAME/example_graph.txt")
-    systemProperty("giraph.input.sourceIds", "$GIRAPH_RUNCFG_DIR/$MSBFS_NAME/source_ids.txt")
+    systemProperty("giraph.output.dir", propOrDefault("giraphOutDir", "$GIRAPH_OUTPUT_DIR/$MSBFS_NAME/${getTimestamp()}"))
+    systemProperty("giraph.input.graph", propOrDefault("giraphInputGraph", "$GIRAPH_RUNCFG_DIR/$MSBFS_NAME/example_graph.txt"))
+    systemProperty("giraph.log.level", propOrDefault("giraphLogLevel", "FATAL"))
+    systemProperty("giraph.thread.n", propOrDefault("giraphThreadN", "1"))
+    systemProperty("giraph.metrics.enable", propOrDefault("giraphMetricsEnable", "false"))
+
+    systemProperty("giraph.input.sourceIds", propOrDefault("giraphSourceIds", "$GIRAPH_RUNCFG_DIR/$MSBFS_NAME/source_ids.txt"))
+
+    jvmArgs = listOf("-Xmx12g")
 }
 
 /* ============== BORUVKA EXAMPLE ==============   */
@@ -73,15 +78,17 @@ val BORUVKA_NAME = "boruvka"
 
 tasks.register<JavaExec>("runBoruvkaExample") {
     dependsOn(exampleJar)
-    classpath = files(exampleJar.get().archiveFile) +
-               configurations.runtimeClasspath.get()
+    group = "Execution"
+    classpath = files(exampleJar.get().archiveFile) + configurations.runtimeClasspath.get()
     mainClass.set("org.algos.$BORUVKA_NAME.runexample.Fun")
 
-    group = "Execution"
-    systemProperty("giraph.output.dir", "$GIRAPH_OUTPUT_DIR/$BORUVKA_NAME/${getTimestamp()}")
-    systemProperty("giraph.input.graph", "$GIRAPH_RUNCFG_DIR/$BORUVKA_NAME/example_graph_triangle.txt")
+    systemProperty("giraph.input.graph", propOrDefault("giraphInputGraph", "$GIRAPH_RUNCFG_DIR/$BORUVKA_NAME/big-boruvka.txt"))
+    systemProperty("giraph.output.dir", propOrDefault("giraphOutDir", "$GIRAPH_OUTPUT_DIR/$BORUVKA_NAME/${getTimestamp()}"))
+    systemProperty("giraph.log.level", propOrDefault("giraphLogLevel", "FATAL"))
+    systemProperty("giraph.thread.n", propOrDefault("giraphThreadN", "1"))
+    systemProperty("giraph.metrics.enable", propOrDefault("giraphMetricsEnable", "false"))
 
-//    jvmArgs = listOf("-Xmx512m")
+    jvmArgs = listOf("-Xmx14g")
 }
 
 /* ============== TOOLS ==============   */
@@ -94,3 +101,6 @@ val exampleJar by tasks.registering(Jar::class) {
 }
 
 fun getTimestamp() = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Date())
+
+fun Project.propOrDefault(key: String, default: String) =
+    if (hasProperty(key)) property(key).toString() else default
