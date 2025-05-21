@@ -31,14 +31,12 @@ public class Boruvka
     }
 
     if (vertex.getValue().isDead) {
-      //      voteToNext();
+      voteToNext();
       vertex.voteToHalt();
       return;
     }
 
     GlobalState globalState = getGlobalState();
-
-    LOG.info("GLOBAL-STATE: " + globalState);
 
     switch (globalState) {
       case PHASE1_CHOSE_MIN_EDGE_AND_SEND_ID:
@@ -230,12 +228,6 @@ public class Boruvka
       Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex, Iterable<BoruvkaMsg> messages) {
     BoruvkaVertexValue myValue = vertex.getValue();
 
-    if (myValue.type == SUPER_VERTEX) {
-      voteToNext();
-      return;
-    }
-    ;
-
     HashMap<Integer, EdgeMeta> superVIdToMinEdgeMeta = new HashMap<>();
 
     for (BoruvkaMsg msg : messages) {
@@ -365,9 +357,11 @@ public class Boruvka
 
   void voteToNext() {
     aggregate("VOTE", new IntWritable(NEXT_VOTE.code));
+    aggregate("NEXT_COUNTER", new IntWritable(1));
   }
 
   void voteToCurrent() {
     aggregate("VOTE", new IntWritable(CURRENT_VOTE.code));
+    aggregate("CURRENT_COUNTER", new IntWritable(1));
   }
 }
