@@ -3,7 +3,6 @@ package org.algos.msbfs;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import org.apache.giraph.io.EdgeReader;
-import org.apache.giraph.io.ReverseEdgeDuplicator;
 import org.apache.giraph.io.formats.IntNullReverseTextEdgeInputFormat;
 import org.apache.giraph.utils.IntPair;
 import org.apache.hadoop.io.IntWritable;
@@ -19,9 +18,7 @@ public class CSVIntNullReverseTextEdgeInputFormat extends IntNullReverseTextEdge
   public EdgeReader<IntWritable, NullWritable> createEdgeReader(
       InputSplit split, TaskAttemptContext context) {
 
-    EdgeReader<IntWritable, NullWritable> edgeReader = new CSVDelimiterEdgeReader();
-
-    return new ReverseEdgeDuplicator<>(edgeReader);
+    return new CSVDelimiterEdgeReader();
   }
 
   public class CSVDelimiterEdgeReader extends IntNullTextEdgeReader {
