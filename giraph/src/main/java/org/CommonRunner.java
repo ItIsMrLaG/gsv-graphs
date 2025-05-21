@@ -17,14 +17,32 @@ public class CommonRunner {
     runner.setConf(conf);
 
     String outputPath = System.getProperty("giraph.output.dir");
+    String logLevel = System.getProperty("giraph.log.level");
+    String threadN = System.getProperty("giraph.thread.n");
+    String metricsEnable = System.getProperty("giraph.metrics.enable");
+
     String[] base_settings =
         new String[] {
-          "-op", outputPath + "/res",
-          "-w", "1",
-          "-ca", "mapred.job.tracker=local",
-          "-ca", "giraph.SplitMasterWorker=false",
-          "-ca", "giraph.useSuperstepCounters=false",
-          "-ca", "mapreduce.joboutput.outputformat.overwrite=true"
+          "-op",
+          outputPath + "/res",
+          "-w",
+          "1",
+          "-ca",
+          "giraph.numComputeThreads=" + threadN,
+          "-ca",
+          "giraph.logLevel=" + logLevel,
+          "-ca",
+          "mapred.job.tracker=local",
+          "-ca",
+          "giraph.SplitMasterWorker=false",
+          "-ca",
+          "giraph.useSuperstepCounters=false",
+          "-ca",
+          "mapreduce.joboutput.outputformat.overwrite=true",
+          "-ca",
+          "giraph.metrics.enable=" + metricsEnable,
+          "-ca",
+          "giraph.metrics.directory=" + outputPath + "/metrics",
         };
 
     String[] settings = new String[args.length + base_settings.length + 1];
