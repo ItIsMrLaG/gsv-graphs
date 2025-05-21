@@ -64,9 +64,9 @@ object MultipleSourceParentBFSRun {
     }
 
     val (computationTimeMs, communicationTimeMs) = MultipleSourceParentBFS.getMetrics
-    val outputFileName = new File(outputFile).getName.stripSuffix(".txt")
+    val inputFileName = new File(inputFile).getName.stripSuffix(".txt")
 
-    val timeWriter = new PrintWriter(new File(s"src/main/resources/metrics/${outputFileName}_msbfs_algorithm_timing.txt"))
+    val timeWriter = new PrintWriter(new File(s"src/main/resources/metrics/${inputFileName}_msbfs_timing.txt"))
     try {
       timeWriter.println(s"ComputationTime(ms): $computationTimeMs")
       timeWriter.println(s"CommunicationTime(ms): $communicationTimeMs")
