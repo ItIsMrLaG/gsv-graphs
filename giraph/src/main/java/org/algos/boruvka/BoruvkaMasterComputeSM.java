@@ -2,9 +2,14 @@ package org.algos.boruvka;
 
 import static org.algos.boruvka.GlobalState.*;
 
+import org.apache.giraph.aggregators.IntSumAggregator;
 import org.apache.giraph.master.DefaultMasterCompute;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.log4j.Logger;
 
 public class BoruvkaMasterComputeSM extends DefaultMasterCompute {
+
+  private static final Logger LOG = Logger.getLogger(BoruvkaMasterComputeSM.class);
 
   GlobalState state = PHASE1_CHOSE_MIN_EDGE_AND_SEND_ID;
 
@@ -12,11 +17,26 @@ public class BoruvkaMasterComputeSM extends DefaultMasterCompute {
   public void initialize() throws InstantiationException, IllegalAccessException {
     registerAggregator("VOTE", VoteAggregator.class);
     registerPersistentAggregator("GLOBAL", GlobalStateIntAggregator.class);
+    registerAggregator("CURRENT_COUNTER", IntSumAggregator.class);
+    registerAggregator("NEXT_COUNTER", IntSumAggregator.class);
   }
 
   @Override
   public void compute() {
     VertexVoteType resultVote = VertexVoteType.fromWritable(getAggregatedValue("VOTE"));
+
+    int current_counter = ((IntWritable) getAggregatedValue("CURRENT_COUNTER")).get();
+    int next_counter = ((IntWritable) getAggregatedValue("NEXT_COUNTER")).get();
+
+    LOG.fatal(
+        "SUPERSTEP:"
+            + getSuperstep()
+            + " | STATE:"
+            + state.code
+            + " | NODES FOR NEXT: "
+            + next_counter
+            + " | NODES FOR CURRENT: "
+            + current_counter);
 
     if (resultVote != VertexVoteType.NEXT_VOTE) {
       setGlobalState(state);
