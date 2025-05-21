@@ -1,7 +1,6 @@
 package org.algos.boruvka;
 
 import java.io.IOException;
-import java.util.List;
 import org.apache.giraph.graph.Vertex;
 import org.apache.giraph.io.formats.TextVertexOutputFormat;
 import org.apache.hadoop.io.*;
@@ -30,22 +29,9 @@ public class BoruvkaOutputFormat
 
     @Override
     protected Text convertVertexToLine(Vertex<IntWritable, BoruvkaVertexValue, EdgeMeta> vertex) {
-      if (vertex.getValue().type != VertexType.SUPER_VERTEX) return null;
+      if (vertex.getValue().type != VertexType.SUPER_VERTEX_PART) return null;
 
-      return new Text(converteValueToString(vertex.getValue().minEdgesMeta));
-    }
-
-    private String converteValueToString(List<EdgeMeta> minEdges) {
-      StringBuilder str = new StringBuilder();
-
-      for (EdgeMeta edge : minEdges) {
-        str.append(edge.pp(delimiter));
-        str.append("\n");
-      }
-
-      str.deleteCharAt(str.length() - 1);
-
-      return str.toString();
+      return new Text(vertex.getValue().getMinEdge().getMeta().pp(delimiter));
     }
   }
 }
