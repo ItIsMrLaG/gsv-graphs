@@ -20,13 +20,7 @@
    sudo apt install sbt
    ```
 
-3. **Запустите sbt:**
-
-   ```bash
-   sbt
-   ```
-
-4. **Внутри sbt вызовите нужную команду в зависимости от требуемого алгоритма.**
+3. **Вызовите нужную команду в зависимости от требуемого алгоритма.**
 
 
 ---
@@ -36,7 +30,7 @@
 ### Команда запуска:
 
 ```bash
-runMain algos.MultipleSourceParentBFSRun path/to/the/input/file.txt path/to/the/output/file.txt coresNum
+sbt "runMain algos.MultipleSourceParentBFSRun path/to/the/input/file.txt path/to/the/output/file.txt coresNum"
 ```
 
 * `path/to/the/input/file.txt` — путь к входному файлу с графом
@@ -93,7 +87,7 @@ runMain algos.MultipleSourceParentBFSRun path/to/the/input/file.txt path/to/the/
 ### Команда запуска:
 
 ```bash
-runMain algos.BoruvkaRun path/to/the/input/file.txt path/to/the/output/file.txt coresNum
+sbt "runMain algos.BoruvkaRun path/to/the/input/file.txt path/to/the/output/file.txt coresNum"
 ```
 
 * `path/to/the/input/file.txt` — путь к входному файлу с графом
@@ -143,10 +137,10 @@ a 2 2 2
 
 ## Файл с метриками выполнения
 
-Для каждого запуска алгоритма автоматически создаётся файл с метриками времени выполнения. Его имя формируется на основе выходного пути, например:
+Для каждого запуска алгоритма автоматически создаётся файл с метриками времени выполнения. Его имя формируется на основе входного пути, например:
 
 ```
-output path: src/main/scala/algos/example.txt
+input file name: example.txt
 => metrics path: src/main/resources/metrics/example_msbfs_algorithm_timing.txt
 ```
 
