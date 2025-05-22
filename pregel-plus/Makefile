@@ -16,7 +16,7 @@ all: boruvka.elf msbfs.elf
 	@echo "🛠️🔨 YEAH, ALL IS FORGED 🛠️🔨"
 
 run_%: %.elf
-	mpiexec -n $(PROC_NUM) $< > $@.res  2> /dev/null
+	mpiexec -n $(PROC_NUM) $(PWD)/$< > $@.res  2> /dev/null
 
 %.elf: %.cpp
 	$(CCOMPILE) $< $(CPPFLAGS) $(LIB) $(LDFLAGS) -o $@
